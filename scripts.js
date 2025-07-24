@@ -34,7 +34,7 @@ $(document).ready(function () {
         grade: grade,
         dob: dob,
         gender: gender,
-       // email: email,
+        // email: email,
         hobbies: hobbies,
       },
 
@@ -50,14 +50,14 @@ $(document).ready(function () {
     });
   });
 
-  $("#edit-btn").click(function () {
+  $(".edit-btn").click(function () {
     let id = $(this).data('id');
     console.log(id);
     $.ajax({
       url: 'get_data.php',
       type: 'POST',
       dataType: 'json',
-      data: { fetch_row: 1, id: id,},
+      data: { fetch_row: 1, id: id, },
       success: function (data) {
         console.log(data);
         document.getElementById('studentName').value = data.name;
@@ -66,13 +66,27 @@ $(document).ready(function () {
         $("#studentDob").val(data.dob);
         $("#studentEmail").val(data.email);
         $(`input[name="gender"][value="${data.gender}"]`).prop("checked", true);
+        // console.log(data.hobby);
+        let hobbies = document.querySelectorAll('input[name="hobbiesEdit[]"]')  // It selects all inputs here with the same name
+        // console.log(hobbies);
+        $('input[name="hobbiesEdit[]"]').prop("checked", false);
+        let hobby = data.hobby.split(",");       // converts it into an array from a string
         
-        data.hobby.forEach(function (hobbies) {
-          console.log(hobbies);
-          // $(`input[name='hobbies[]'][value="${hobbies}"]`).prop("checked", true);
-        });
-      } 
-      });
+        // alert();
+        hobbies.forEach(checkbox => {                   // run a for loop on an item named
+          // console.log('from db: '+hobby);
+          // console.log('is exist: '+checkbox.value);
+          if(Array.isArray(hobby)){                               // If it's an array or not
+              let isChecked = hobby.includes(checkbox.value);     // matches checkbox's buttons to the ahobby array,returns true or false in accordance
+              // console.log(isChecked);
+              if (isChecked == true){                             // if the match is found
+                checkbox.checked = isChecked;                     // correct it
+              }
+          }
+          });
+      }
+    });
+
   });
 });
 
@@ -85,62 +99,3 @@ $(document).ready(function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// var edit_id;
-// var $edit_comment;
-
-// // Edit button clicked - load comment into form
-// $(document).on('click', '.edit', function() {
-//   edit_id = $(this).data('id');
-//   $edit_comment = $(this).parent();
-//   var name = $(this).siblings('.display_name').text();
-//   var comment = $(this).siblings('.comment_text').text();
-
-//   $('#name').val(name);
-//   $('#comment').val(comment);
-//   $('#submit_btn').hide();
-//   $('#update_btn').show();
-// });
-
-// // update button
-//   $(document).on('click', '#update_btn', function() {
-//     var id = edit_id;
-//     var name = $('#name').val();
-//     var comment = $('#comment').val();
-//     $.ajax({
-//       url: 'server.php',
-//       type: 'POST',
-//       data: {
-//         'update': 1,
-//         'id': id,
-//         'name': name,
-//         'comment': comment,
-//       },
-//       success: function(response) {
-//         $('#name').val('');
-//         $('#comment').val('');
-//         $('#submit_btn').show();
-//         $('#update_btn').hide();
-//         $edit_comment.replaceWith(response); // Update comment in DOM
-//       }
-//     });
-//   });
