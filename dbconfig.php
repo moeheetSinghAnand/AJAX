@@ -8,5 +8,4 @@
         die("Connection failed: " . $conn->connect_error);
     }
     // print_r($conn->connect_error);
-
 ?>
